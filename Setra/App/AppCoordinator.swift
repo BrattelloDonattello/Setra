@@ -10,7 +10,13 @@ final class AppCoordinator {
     
     var path = NavigationPath()
     
-    var presentWorkoutID: UUID?
+    var createProgramViewModel: CreateProgramViewModel?
+    
+    func startCreateProgram() {
+        createProgramViewModel = CreateProgramViewModel()
+        
+        path.append(AppRoute.createProgram)
+    }
     
     func navigate(to route: AppRoute) {
         path.append(route)
@@ -26,11 +32,9 @@ final class AppCoordinator {
         path = NavigationPath()
     }
     
-    func startWorkout(id: UUID) {
-        presentWorkoutID = id
-    }
-    
-    func dismissWorkout() {
-        presentWorkoutID = nil
+    func finishCreateProgram() {
+        createProgramViewModel = nil
+        
+        popToRoot()
     }
 }

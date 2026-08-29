@@ -4,77 +4,45 @@ import SwiftUI
 struct ExercisePickerView: View {
     @Environment(AppCoordinator.self) private var coordinator
     
-    @State private var selectedExercises: Set<String> = []
-    
-    private let exercises = [
-        "Bench Press",
-        "Incline Bench Press",
-        "Chest Fly",
-        "Shoulder Press",
-        "Lateral Raise",
-        "Lat Pulldown",
-        "Seated Row",
-        "Biceps Curl",
-        "Triceps Pushdown",
-        "Squat"
-    ]
-    
     var body: some View {
-        List(exercises, id: \.self) { exercise in
-            ExercisePickerRow(title: exercise, isSelected: selectedExercises.contains(exercise)) {
-                toggle(exercise)
+        if let viewModel = coordinator.createProgramViewModel {
+            content(viewModel: viewModel)
+        } else {
+            ContentUnavailableView("Something went wrong", systemImage: "exclamationmark.triangle")
+        }
+    }
+    
+    private func content(viewModel: CreateProgramViewModel) -> some View {
+        List {
+            ForEach(ExerciseCatalog.exercises) { exercises in
+                ExercisePickerRow(
+                    exercises: exercises,
+                    isSelected: viewModel.isSelected(exercises)) {
+                        viewModel.toggleExercise(exercises)
+                    }
             }
         }
         .navigationTitle("Exercises")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
-            doneButton
+            
         }
     }
     
-    
-    private var doneButton: some View {
+    private func doneButton(viewModel: CreateProgramViewModel) -> View {
         Button {
             coordinator.pop()
         } label: {
-            Text(
-                "Done (\(selectedExercises.count))"
-            )
-            .font(.headline)
-            .foregroundStyle(.black)
-            .frame(
-                maxWidth: .infinity
-            )
-            .frame(
-                height: 54
-            )
-            .background(
-                Color.green
-            )
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 16
-                )
-            )
+            Text("Done (\(viewModel.selectedExercises.count))")
+                .font(.headline)
+                .foregroundStyle(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .background(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
         }
-        .disabled(
-            selectedExercises.isEmpty
-        )
         .padding()
-        .background(
-            .ultraThinMaterial
-        )
-    }
-    
-    
-    private func toggle(
-        _ exercise: String
-    ) {
-        if selectedExercises.contains(exercise) {
-            selectedExercises.remove(exercise)
-        } else {
-            selectedExercises.insert(exercise)
-        }
+        .background(.ultraThinMaterial)
     }
 }
 

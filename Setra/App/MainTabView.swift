@@ -22,7 +22,7 @@ struct MainTabView: View {
                     .navigationDestination(for: AppRoute.self) { route in
                         switch route {
                         case .createProgram:
-                            CreateProgramView()
+                            CreateProgramFlowView()
                         case .exercisePicker:
                             ExercisePickerView()
                         }

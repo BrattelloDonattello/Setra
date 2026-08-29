@@ -16,7 +16,7 @@ struct ProgramsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    coordinator.navigate(to: .createProgram)
+                    coordinator.startCreateProgram()
                 } label: {
                     Image(systemName: "plus")
                 }

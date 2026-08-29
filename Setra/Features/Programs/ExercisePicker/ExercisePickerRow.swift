@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct ExercisePickerRow: View {
-    let title: String
+    let exercises: Exercise
     
     let isSelected: Bool
     
@@ -11,7 +11,14 @@ struct ExercisePickerRow: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Text(title)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(exercises.name)
+                        .foregroundStyle(.primary)
+                    
+                    Text(exercises.muscleGroup.title)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 
                 Spacer()
                 
