@@ -59,9 +59,15 @@ struct CreateProgramView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
-                    // Save program
+                    Task {
+                        let success = await viewModel.save()
+                        
+                        if success {
+                            coordinator.finishCreateProgram()
+                        }
+                    }
                 }
-                .disabled(!viewModel.canSave)
+                .disabled(!viewModel.canSave || viewModel.isSaving)
             }
         }
     }
