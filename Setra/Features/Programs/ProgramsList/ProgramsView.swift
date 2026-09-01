@@ -4,30 +4,56 @@ import SwiftUI
 struct ProgramsView: View {
     @Environment(AppCoordinator.self) private var coordinator
     
+    @State private var viewModel: ProgramsListViewModel
+    
+    private let makeCreateProgramViewModel: () -> CreateProgramViewModel
+    
+    init(
+        viewModel: ProgramsListViewModel,
+        makeCreateProgramViewModel: @escaping () -> CreateProgramViewModel
+    ) {
+        _viewModel = State(initialValue: viewModel)
+        
+        self.makeCreateProgramViewModel = makeCreateProgramViewModel
+    }
+    
     var body: some View {
-        VStack {
-            ContentUnavailableView(
-                "No Prgorams",
-                systemImage: "dumbbell",
-                description: Text("Create your first workout program.")
-            )
+        Group {
+            if viewModel.isLoading {
+                ProgressView()
+            } else if viewModel.programs.isEmpty {
+                ContentUnavailableView("No Programs", systemImage: "dumbbell", description: Text("Create your first workout program."))
+            } else {
+                List(viewModel.programs) { program in
+                    programRow(program)
+                }
+            }
         }
         .navigationTitle("Programs")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    coordinator.startCreateProgram()
+                Button{
+                    coordinator.startCreateProgram(viewModel: makeCreateProgramViewModel())
                 } label: {
                     Image(systemName: "plus")
                 }
             }
         }
+        .onAppear {
+            Task {
+                await viewModel.loadPrograms()
+            }
+        }
     }
-}
-
-#Preview {
-    NavigationView {
-        ProgramsView()
-            .environment(AppCoordinator())
+    
+    private func programRow(_ program: WorkoutProgram) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(program.name)
+                .font(.headline)
+            
+            Text("\(program.exercise.count) exercise")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
     }
 }

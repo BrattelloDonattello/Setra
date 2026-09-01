@@ -12,8 +12,8 @@ final class AppCoordinator {
     
     var createProgramViewModel: CreateProgramViewModel?
     
-    func startCreateProgram() {
-        createProgramViewModel = CreateProgramViewModel()
+    func startCreateProgram(viewModel: CreateProgramViewModel) {
+        createProgramViewModel = viewModel
         
         path.append(AppRoute.createProgram)
     }

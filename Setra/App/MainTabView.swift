@@ -4,6 +4,8 @@ struct MainTabView: View {
     
     @Bindable var coordinator: AppCoordinator
     
+    let dependencies: AppDependencies
+    
     var body: some View {
         TabView(selection: $coordinator.selectedTab) {
             NavigationStack {
@@ -18,7 +20,7 @@ struct MainTabView: View {
             .tag(AppTab.home)
             
             NavigationStack(path: $coordinator.path) {
-                ProgramsView()
+                ProgramsView(viewModel: dependencies.makeProgramsListViewModel(), makeCreateProgramViewModel: { dependencies.makeCreateProgramViewModel() })
                     .navigationDestination(for: AppRoute.self) { route in
                         switch route {
                         case .createProgram:
@@ -59,8 +61,4 @@ struct MainTabView: View {
             .tag(AppTab.settings)
         }
     }
-}
-
-#Preview {
-    MainTabView(coordinator: AppCoordinator())
 }

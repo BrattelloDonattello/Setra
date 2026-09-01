@@ -5,14 +5,13 @@ import SwiftUI
 struct AppCoordinatorView: View {
     @State private var coordinator = AppCoordinator()
     
+    let dependencies: AppDependencies
+    
     var body: some View {
         MainTabView(
-            coordinator: coordinator
+            coordinator: coordinator,
+            dependencies: dependencies
         )
         .environment(coordinator)
     }
-}
-
-#Preview {
-    AppCoordinatorView()
 }
