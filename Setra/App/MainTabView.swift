@@ -27,6 +27,8 @@ struct MainTabView: View {
                             CreateProgramFlowView()
                         case .exercisePicker:
                             ExercisePickerView()
+                        case .programDetails(let programID):
+                            ProgramDetailsView(viewModel: dependencies.makeProgramDetailsViewModel(programID: programID))
                         }
                     }
             }

@@ -25,7 +25,11 @@ struct ProgramsView: View {
                 ContentUnavailableView("No Programs", systemImage: "dumbbell", description: Text("Create your first workout program."))
             } else {
                 List(viewModel.programs) { program in
-                    programRow(program)
+                    Button {
+                        coordinator.navigate(to: .programDetails(program.id))
+                    } label: {
+                        programRow(program)
+                    }.buttonStyle(.plain)
                 }
             }
         }
@@ -47,13 +51,23 @@ struct ProgramsView: View {
     }
     
     private func programRow(_ program: WorkoutProgram) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(program.name)
-                .font(.headline)
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(program.name)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                
+                Text("\(program.exercise.count) exercise")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             
-            Text("\(program.exercise.count) exercise")
+            Spacer()
+            
+            Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+        .contentShape(Rectangle())
     }
 }

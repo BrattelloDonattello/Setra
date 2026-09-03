@@ -28,4 +28,12 @@ final class AppDependencies {
     func makeCreateProgramViewModel() -> CreateProgramViewModel {
         CreateProgramViewModel(createProgramUseCase: makeCreateProgramUseCase())
     }
+    
+    func makeGetProgramDetailsUseCase() -> GetProgramDetailsUseCase {
+        DefaultGetProgramDetailsUseCase(repository: programRepository)
+    }
+    
+    func makeProgramDetailsViewModel(programID: UUID) -> ProgramDetailsViewModel {
+        ProgramDetailsViewModel(programID: programID, getProgramDetailsUseCase: makeGetProgramDetailsUseCase())
+    }
 }
