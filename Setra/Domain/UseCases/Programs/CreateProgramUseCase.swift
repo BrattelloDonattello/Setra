@@ -24,9 +24,9 @@ final class DefaultCreateProgramUseCase: CreateProgramUseCase {
             return
         }
         
-        let programExercises = exercises.enumerated().map({ index, exercise in
+        let programExercises = exercises.enumerated().map{ index, exercise in
                 ProgramExercises(exercises: exercise, order: index)
-        })
+        }
         
         let program = WorkoutProgram(name: trimedName, exercise: programExercises)
         
