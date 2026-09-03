@@ -7,10 +7,14 @@ final class AppDependencies {
     
     private let programRepository: ProgramRepositories
     
+    private let workoutRepository: WorkoutRepository
+    
     init() {
         swiftDataContainer = SwiftDataContainer()
         
         programRepository = DefaultProgramRepository(modelContext: swiftDataContainer.container.mainContext)
+        
+        workoutRepository = InMemoryWorkoutRepository()
     }
     
     func makeCreateProgramUseCase() -> CreateProgramUseCase {
@@ -35,5 +39,13 @@ final class AppDependencies {
     
     func makeProgramDetailsViewModel(programID: UUID) -> ProgramDetailsViewModel {
         ProgramDetailsViewModel(programID: programID, getProgramDetailsUseCase: makeGetProgramDetailsUseCase())
+    }
+    
+    func makeStartWorkoutUseCase() -> StartWorkoutUseCase {
+        DefaultStartWorkoutUseCase()
+    }
+    
+    func makeFinishWorkoutUseCase() -> FinishWorkoutUseCase {
+        DefaultFinishWorkoutUseCase(repository: workoutRepository)
     }
 }
