@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ProgramDetailsView: View {
+    @Environment(AppCoordinator.self) private var coordinator
+    
     @State private var viewModel: ProgramDetailsViewModel
     
     init(viewModel: ProgramDetailsViewModel) {
@@ -54,7 +56,13 @@ struct ProgramDetailsView: View {
     
     private var startWorkoutButton: some View {
         Button {
-            
+            Task {
+                guard let workout = await viewModel.startWorkout() else {
+                    return
+                }
+                
+                coordinator.startWorkout(workout)
+            }
         } label: {
             Text("Start Workout")
                 .font(.headline)

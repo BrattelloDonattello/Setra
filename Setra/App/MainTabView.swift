@@ -29,6 +29,12 @@ struct MainTabView: View {
                             ExercisePickerView()
                         case .programDetails(let programID):
                             ProgramDetailsView(viewModel: dependencies.makeProgramDetailsViewModel(programID: programID))
+                        case .activeWorkout:
+                            if let workout = coordinator.activeWorkout {
+                                ActiveWorkoutView(viewModel: dependencies.makeActiveWorkoutViewModel(workout: workout))
+                            } else {
+                                ContentUnavailableView("Workout not found", systemImage: "exclamationmark.triangle")
+                            }
                         }
                     }
             }

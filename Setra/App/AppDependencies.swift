@@ -38,7 +38,7 @@ final class AppDependencies {
     }
     
     func makeProgramDetailsViewModel(programID: UUID) -> ProgramDetailsViewModel {
-        ProgramDetailsViewModel(programID: programID, getProgramDetailsUseCase: makeGetProgramDetailsUseCase())
+        ProgramDetailsViewModel(programID: programID, getProgramDetailsUseCase: makeGetProgramDetailsUseCase(), startWorkoutUseCase: makeStartWorkoutUseCase())
     }
     
     func makeStartWorkoutUseCase() -> StartWorkoutUseCase {
@@ -47,5 +47,9 @@ final class AppDependencies {
     
     func makeFinishWorkoutUseCase() -> FinishWorkoutUseCase {
         DefaultFinishWorkoutUseCase(repository: workoutRepository)
+    }
+    
+    func makeActiveWorkoutViewModel(workout: WorkoutSession) -> ActiveWorkoutViewModel {
+        ActiveWorkoutViewModel(workout: workout, finishWorkoutUseCase: makeFinishWorkoutUseCase())
     }
 }
