@@ -14,9 +14,12 @@ final class ProgramDetailsViewModel {
     
     private let getProgramDetailsUseCase: GetProgramDetailsUseCase
     
-    init(programID: UUID, getProgramDetailsUseCase: GetProgramDetailsUseCase) {
+    private let startWorkoutUseCase: StartWorkoutUseCase
+    
+    init(programID: UUID, getProgramDetailsUseCase: GetProgramDetailsUseCase, startWorkoutUseCase: StartWorkoutUseCase) {
         self.programID = programID
         self.getProgramDetailsUseCase = getProgramDetailsUseCase
+        self.startWorkoutUseCase = startWorkoutUseCase
     }
     
     func load() async {
@@ -30,6 +33,20 @@ final class ProgramDetailsViewModel {
             program = try await getProgramDetailsUseCase.execute(id: programID)
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+    
+    func startWorkout() async -> WorkoutSession? {
+        guard let program else {
+            return nil
+        }
+        
+        do {
+            return try await startWorkoutUseCase.execute(program: program)
+        } catch {
+            errorMessage = error.localizedDescription
+            
+            return nil
         }
     }
 }

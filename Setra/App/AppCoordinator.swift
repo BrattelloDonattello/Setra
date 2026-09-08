@@ -12,6 +12,8 @@ final class AppCoordinator {
     
     var createProgramViewModel: CreateProgramViewModel?
     
+    var activeWorkout: WorkoutSession?
+    
     func startCreateProgram(viewModel: CreateProgramViewModel) {
         createProgramViewModel = viewModel
         
@@ -34,6 +36,18 @@ final class AppCoordinator {
     
     func finishCreateProgram() {
         createProgramViewModel = nil
+        
+        popToRoot()
+    }
+    
+    func startWorkout(_ workout: WorkoutSession) {
+        activeWorkout = workout
+        
+        path.append(AppRoute.activeWorkout)
+    }
+    
+    func finishWorkoutFlow() {
+        activeWorkout = nil
         
         popToRoot()
     }
