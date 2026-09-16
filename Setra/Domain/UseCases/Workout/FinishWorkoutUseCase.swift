@@ -1,7 +1,7 @@
 import Foundation
 
 protocol FinishWorkoutUseCase {
-    func execute(workout: WorkoutSession) async throws
+    func execute(workout: WorkoutSession) async throws -> WorkoutSession
 }
 
 final class DefaultFinishWorkoutUseCase: FinishWorkoutUseCase {
@@ -11,11 +11,13 @@ final class DefaultFinishWorkoutUseCase: FinishWorkoutUseCase {
         self.repository = repository
     }
     
-    func execute(workout: WorkoutSession) async throws {
+    func execute(workout: WorkoutSession) async throws -> WorkoutSession {
         var finishedWorkout = workout
         
         finishedWorkout.finishedAt = Date()
         
         try await repository.save(finishedWorkout)
+        
+        return finishedWorkout
     }
 }

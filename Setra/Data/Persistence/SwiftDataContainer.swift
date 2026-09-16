@@ -6,7 +6,13 @@ final class SwiftDataContainer {
     
     init() {
         do {
-            container = try ModelContainer(for: SDWorkoutProgram.self, SDWorkoutProgram.self)
+            container = try ModelContainer(for:
+                                            SDWorkoutProgram.self,
+                                           SDProgramExercise.self,
+                                           SDWorkoutSession.self,
+                                           SDWorkoutExercise.self,
+                                           SDWorkoutSet.self
+            )
         } catch {
             fatalError("Failed to create ModelContainter: \(error)")
         }

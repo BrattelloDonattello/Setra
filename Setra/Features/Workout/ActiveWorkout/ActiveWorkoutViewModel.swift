@@ -91,7 +91,8 @@ final class ActiveWorkoutViewModel {
         }
         
         do {
-            try await finishWorkoutUseCase.execute(workout: workout)
+            
+            workout = try await finishWorkoutUseCase.execute(workout: workout)
             
             return true
         } catch {
