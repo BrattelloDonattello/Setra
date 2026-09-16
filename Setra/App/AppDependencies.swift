@@ -14,7 +14,7 @@ final class AppDependencies {
         
         programRepository = DefaultProgramRepository(modelContext: swiftDataContainer.container.mainContext)
         
-        workoutRepository = InMemoryWorkoutRepository()
+        workoutRepository = DefaultWorkoutRepository(modelContext: swiftDataContainer.container.mainContext)
     }
     
     func makeCreateProgramUseCase() -> CreateProgramUseCase {
