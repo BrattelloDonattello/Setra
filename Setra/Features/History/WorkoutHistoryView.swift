@@ -24,7 +24,7 @@ struct WorkoutHistoryView: View {
         }
         .refreshable {
             await viewModel.load()
-        }
+        } 
         .alert(
             "Something went wrong",
             isPresented:
