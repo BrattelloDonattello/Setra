@@ -49,6 +49,8 @@ final class AppCoordinator {
     func finishWorkoutFlow() {
         activeWorkout = nil
         
-        popToRoot()
+        path = NavigationPath()
+        
+        selectedTab = .history
     }
 }

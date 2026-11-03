@@ -47,7 +47,7 @@ struct MainTabView: View {
             .tag(AppTab.programs)
             
             NavigationStack {
-                HistoryView()
+                WorkoutHistoryView(viewModel: dependencies.makeWorkoutHistoryViewModel())
             }
             .tabItem {
                 Label(

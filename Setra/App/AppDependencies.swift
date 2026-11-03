@@ -52,4 +52,12 @@ final class AppDependencies {
     func makeActiveWorkoutViewModel(workout: WorkoutSession) -> ActiveWorkoutViewModel {
         ActiveWorkoutViewModel(workout: workout, finishWorkoutUseCase: makeFinishWorkoutUseCase())
     }
+    
+    func makeGetWorkoutHistoryUseCase() -> GetWorkoutHistoryUseCase {
+        DefaultGetWorkoutHistoryUseCase(repository: workoutRepository)
+    }
+    
+    func makeWorkoutHistoryViewModel() -> WorkoutHistoryViewModel {
+        WorkoutHistoryViewModel(getWorkoutHistoryUseCase:makeGetWorkoutHistoryUseCase())
+    }
 }
