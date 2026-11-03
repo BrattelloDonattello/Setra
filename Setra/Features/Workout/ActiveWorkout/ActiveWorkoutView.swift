@@ -96,7 +96,7 @@ struct ActiveWorkoutView: View {
                 let success = await viewModel.finish()
                 
                 if success {
-                    coordinator.popToRoot()
+                    coordinator.finishWorkoutFlow()
                 }
             }
         } label: {
