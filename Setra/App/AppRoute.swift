@@ -5,4 +5,5 @@ enum AppRoute: Hashable {
     case exercisePicker
     case programDetails(UUID)
     case activeWorkout
+    case workoutDetails(UUID)
 }

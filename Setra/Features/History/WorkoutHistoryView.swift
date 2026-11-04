@@ -4,6 +4,8 @@ import SwiftUI
 struct WorkoutHistoryView: View {
     @State private var viewModel: WorkoutHistoryViewModel
     
+    @Environment(AppCoordinator.self) private var coordinator
+    
     init(viewModel: WorkoutHistoryViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
@@ -62,7 +64,12 @@ struct WorkoutHistoryView: View {
     
     private var workoutList: some View {
         List(viewModel.workouts) { workout in
-            workoutRow(workout)
+            Button {
+                coordinator.openWorkoutDetails(id: workout.id)
+            } label: {
+                workoutRow(workout)
+            }
+            .buttonStyle(.plain)
         }
         .listStyle(.plain)
     }

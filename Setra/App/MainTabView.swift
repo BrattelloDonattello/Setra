@@ -35,6 +35,8 @@ struct MainTabView: View {
                             } else {
                                 ContentUnavailableView("Workout not found", systemImage: "exclamationmark.triangle")
                             }
+                        case .workoutDetails:
+                            EmptyView()
                         }
                     }
             }
@@ -46,8 +48,16 @@ struct MainTabView: View {
             }
             .tag(AppTab.programs)
             
-            NavigationStack {
+            NavigationStack(path: $coordinator.historyPath) {
                 WorkoutHistoryView(viewModel: dependencies.makeWorkoutHistoryViewModel())
+                    .navigationDestination(for: AppRoute.self) { route in
+                        switch route {
+                        case .workoutDetails(let workoutID):
+                            WorkoutDetailsView(viewModel: dependencies.makeWorkoutDetailsViewModel(workoutID: workoutID))
+                        default:
+                            EmptyView()
+                        }
+                    }
             }
             .tabItem {
                 Label(

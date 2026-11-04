@@ -8,11 +8,13 @@ import SwiftUI
 final class AppCoordinator {
     var selectedTab: AppTab = .home
     
-    var path = NavigationPath()
-    
     var createProgramViewModel: CreateProgramViewModel?
     
     var activeWorkout: WorkoutSession?
+    
+    var path = NavigationPath()
+    
+    var historyPath = NavigationPath()
     
     func startCreateProgram(viewModel: CreateProgramViewModel) {
         createProgramViewModel = viewModel
@@ -52,5 +54,9 @@ final class AppCoordinator {
         path = NavigationPath()
         
         selectedTab = .history
+    }
+    
+    func openWorkoutDetails(id: UUID) {
+        historyPath.append(AppRoute.workoutDetails(id))
     }
 }
