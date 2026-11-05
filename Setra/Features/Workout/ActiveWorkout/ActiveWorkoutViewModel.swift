@@ -5,18 +5,25 @@ import Observation
 @Observable
 final class ActiveWorkoutViewModel {
     private(set) var workout: WorkoutSession
+    private(set) var previousPerformance: [UUID: WorkoutExercise] = [:]
     private(set) var isFinishing = false
     var errorMessage: String?
     
     private let finishWorkoutUseCase: FinishWorkoutUseCase
+    private let getLastPerfomanceUseCase: GetLastPerfomanceUseCase
     
     var elapsedTime: TimeInterval {
         Date().timeIntervalSince(workout.startedAt)
     }
     
-    init(workout: WorkoutSession, finishWorkoutUseCase: FinishWorkoutUseCase) {
+    init(
+        workout: WorkoutSession,
+        finishWorkoutUseCase: FinishWorkoutUseCase,
+        getLastPerfomanceUseCase: GetLastPerfomanceUseCase
+    ) {
         self.workout = workout
         self.finishWorkoutUseCase = finishWorkoutUseCase
+        self.getLastPerfomanceUseCase = getLastPerfomanceUseCase
     }
     
     func updateWeight(exerciseID: UUID, setID: UUID, weight: Double) {
@@ -118,5 +125,36 @@ final class ActiveWorkoutViewModel {
         }
         
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    func loadPreviousPerfomance() async {
+        for exercise in workout.exercises {
+            
+            do {
+                let previous = try await getLastPerfomanceUseCase.execute(exerciseID: exercise.exerciseID)
+                
+                if let previous {
+                    previousPerformance[exercise.exerciseID] = previous
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            
+        }
+    }
+    
+    func previousSet(
+        exerciseID: UUID,
+        setIndex: Int
+    ) -> WorkoutSet? {
+        guard let exercise = previousPerformance[exerciseID] else {
+            return nil
+        }
+        
+        guard exercise.sets.indices.contains(setIndex) else {
+            return nil
+        }
+        
+        return exercise.sets[setIndex]
     }
 }

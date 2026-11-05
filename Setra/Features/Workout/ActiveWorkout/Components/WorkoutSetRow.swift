@@ -5,6 +5,16 @@ struct WorkoutSetRow: View {
     let setNumber: Int
     let workotuSet: WorkoutSet
     
+    let previousSet: WorkoutSet?
+    
+    private var lastPerfomanceText: String {
+        guard let previousSet else {
+            return "-"
+        }
+        
+        return "\(previousSet.weight.formatted()) x \(previousSet.reps)"
+    }
+    
     let onWeightChanged: (Double) -> Void
     
     let onRepsChanged: (Int) -> Void
@@ -19,6 +29,13 @@ struct WorkoutSetRow: View {
         HStack {
             Text("\(setNumber)")
                 .frame(width: 35)
+            
+            Text(lastPerfomanceText)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 75)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
             
             Spacer()
             
