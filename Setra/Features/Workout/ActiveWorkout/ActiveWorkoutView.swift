@@ -24,6 +24,9 @@ struct ActiveWorkoutView: View {
         }
         .navigationTitle(viewModel.workout.programName)
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await viewModel.loadPreviousPerfomance()
+        }
     }
     
     @ViewBuilder
@@ -38,6 +41,7 @@ struct ActiveWorkoutView: View {
                 WorkoutSetRow(
                     setNumber: index + 1,
                     workotuSet: workoutSet,
+                    previousSet: viewModel.previousSet(exerciseID: exercise.exerciseID, setIndex: index),
                     onWeightChanged: { weight in
                         viewModel.updateWeight(exerciseID: exercise.id, setID: workoutSet.id, weight: weight)
                     },
@@ -74,17 +78,21 @@ struct ActiveWorkoutView: View {
     private var setHeader: some View {
         HStack {
             Text("SET")
-                .frame(width: 35)
-            Spacer()
+                .frame(width: 30)
+            
+            Text("LAST")
+                .frame(width: 75)
+            
+            Spacer(minLength: 0)
             
             Text("KG")
-                .frame(width: 80)
+                .frame(width: 65)
             
             Text("REPS")
-                .frame(width: 80)
+                .frame(width: 65)
             
             Text("")
-                .frame(width: 40)
+                .frame(width: 30)
         }
         .font(.caption)
         .foregroundStyle(.secondary)

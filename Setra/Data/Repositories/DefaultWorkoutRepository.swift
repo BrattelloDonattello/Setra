@@ -59,11 +59,23 @@ final class DefaultWorkoutRepository: WorkoutRepository {
                 continue
             }
             
-            if let exercise = workout.exercises.first(where: {
+            guard let exercise = workout.exercises.first(where: {
                 $0.exerciseID == exerciseID
-            }) {
-                return exercise.toDomain()
+            }) else {
+                continue
             }
+            
+            var result = exercise.toDomain()
+            
+            result.sets = result.sets.filter {
+                $0.isCompleted
+            }
+            
+            guard !result.sets.isEmpty else {
+                continue
+            }
+            
+            return result
         }
         
         return nil
