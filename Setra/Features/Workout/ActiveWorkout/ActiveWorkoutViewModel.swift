@@ -62,16 +62,31 @@ final class ActiveWorkoutViewModel {
         workout.exercises[exerciseIndex].sets[setIndex].isCompleted.toggle()
     }
     
-    func addSet(exerciseID: UUID) {
-        guard let exerciseIndex = workout.exercises.firstIndex(where: {$0.id == exerciseID}) else {
+    
+    func addSet(
+        exerciseID: UUID
+    ) {
+        guard let exercisIndex = workout.exercises.firstIndex(
+            where: {$0.id == exerciseID}
+        ) else {
             return
         }
         
-        let previousSet = workout.exercises[exerciseIndex].sets.last
+        let sets = workout.exercises[exercisIndex].sets
         
-        let newSet = WorkoutSet(weight: previousSet?.weight ?? 0, reps: previousSet?.reps ?? 0)
+        let previousSet = sets.last
         
-        workout.exercises[exerciseIndex].sets.append(newSet)
+        let nextOrder = (sets.map(\.order).max() ?? -1) + 1
+        
+        let newSet = WorkoutSet(
+            order: nextOrder,
+            weight: previousSet?.weight ?? 0,
+            reps:  previousSet?.reps ?? 0
+        )
+        
+        workout.exercises[exercisIndex]
+            .sets
+            .append(newSet)
     }
     
     func removeSet(exerciseID: UUID, setID: UUID) {
@@ -147,14 +162,21 @@ final class ActiveWorkoutViewModel {
         exerciseID: UUID,
         setIndex: Int
     ) -> WorkoutSet? {
-        guard let exercise = previousPerformance[exerciseID] else {
+        guard let exercise = previousPerformance[
+            exerciseID
+        ] else {
             return nil
         }
         
-        guard exercise.sets.indices.contains(setIndex) else {
+        let sortedSets = exercise.sets
+            .sorted {
+                $0.order < $1.order
+            }
+        
+        guard sortedSets.indices.contains(setIndex) else {
             return nil
         }
         
-        return exercise.sets[setIndex]
+        return sortedSets[setIndex]
     }
 }

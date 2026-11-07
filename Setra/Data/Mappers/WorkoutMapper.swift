@@ -5,6 +5,7 @@ extension SDWorkoutSet {
     func toDomain() -> WorkoutSet {
         WorkoutSet(
             id: id,
+            order: order,
             weight: weight,
             reps: reps,
             isCompleted: isCompleted
@@ -14,6 +15,7 @@ extension SDWorkoutSet {
     static func fromDomain(_ set: WorkoutSet) -> SDWorkoutSet {
         SDWorkoutSet(
             id: set.id,
+            order: set.order,
             weight: set.weight,
             reps: set.reps,
             isCompleted: set.isCompleted
@@ -27,7 +29,12 @@ extension SDWorkoutExercise {
             id: id,
             exerciseID: exerciseID,
             exerciseName: exerciseName,
-            sets: sets.map {
+            order: order,
+            sets: sets
+                .sorted {
+                    $0.order < $1.order
+                }
+                .map {
                 $0.toDomain()
             }
         )
@@ -38,6 +45,7 @@ extension SDWorkoutExercise {
             id: exercise.id,
             exerciseID: exercise.exerciseID,
             exerciseName: exercise.exerciseName,
+            order: exercise.order,
             sets: exercise.sets.map {
                 SDWorkoutSet.fromDomain($0)
             }
@@ -53,9 +61,13 @@ extension SDWorkoutSession {
             programName: programName,
             startedAt: startedAt,
             finishedAt: finishAt,
-            exercises: exercises.map {
-                $0.toDomain()
-            }
+            exercises: exercises
+                .sorted {
+                    $0.order < $1.order
+                }
+                .map {
+                    $0.toDomain()
+                }
         )
     }
     

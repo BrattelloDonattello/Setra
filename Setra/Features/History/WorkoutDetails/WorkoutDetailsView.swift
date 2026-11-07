@@ -108,7 +108,9 @@ struct WorkoutDetailsView: View {
             Text("Exercises")
                 .font(.title2.bold())
             
-            ForEach(workout.exercises) { exercise in
+            ForEach(workout.exercises.sorted {
+                $0.order < $1.order
+            }) { exercise in
                 exerciseCard(exercise)
             }
         }
@@ -121,7 +123,11 @@ struct WorkoutDetailsView: View {
             
             Divider()
             
-            ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
+            ForEach(
+                Array(exercise.sets.sorted{
+                    $0.order < $1.order
+                }.enumerated()), id: \.element.id
+            ) { index, set in
                 workoutSetRow(set, number: index + 1)
             }
         }
