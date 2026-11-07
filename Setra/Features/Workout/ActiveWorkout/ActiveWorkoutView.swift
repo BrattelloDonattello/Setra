@@ -14,7 +14,11 @@ struct ActiveWorkoutView: View {
             VStack(spacing: 20) {
                 timerSection
                 
-                ForEach(viewModel.workout.exercises) { exercise in
+                ForEach(
+                    viewModel.workout.exercises.sorted {
+                        $0.order < $1.order
+                    }
+                ) { exercise in
                     workoutExerciseCard(exercise)
                 }
                 
@@ -37,7 +41,11 @@ struct ActiveWorkoutView: View {
             
             setHeader
             
-            ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, workoutSet in
+            ForEach(
+                Array(exercise.sets.sorted {
+                    $0.order < $1.order
+                }.enumerated()), id: \.element.id
+            ) { index, workoutSet in
                 WorkoutSetRow(
                     setNumber: index + 1,
                     workotuSet: workoutSet,
